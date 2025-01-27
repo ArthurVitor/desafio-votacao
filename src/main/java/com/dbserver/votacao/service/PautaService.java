@@ -7,7 +7,6 @@ import com.dbserver.votacao.exception.PautaNotFoundException;
 import com.dbserver.votacao.mapper.PautaMapper;
 import com.dbserver.votacao.model.Pauta;
 import com.dbserver.votacao.repository.PautaRepository;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,7 @@ public class PautaService {
 
     private final PautaMapper pautaMapper;
 
-    public PautaService(PautaRepository pautaRepository, @Qualifier("pautaMapperImpl") PautaMapper pautaMapper) {
+    public PautaService(PautaRepository pautaRepository, PautaMapper pautaMapper) {
         this.pautaRepository = pautaRepository;
         this.pautaMapper = pautaMapper;
     }
