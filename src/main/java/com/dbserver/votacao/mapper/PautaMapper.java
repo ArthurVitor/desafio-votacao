@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 public interface PautaMapper {
     ListPautaDto toDto(Pauta pauta);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "creationDate", ignore = true)
     Pauta toPauta(CreatePautaDto dto);
 
     @Mapping(target = "pageNumber", source = "page.number")
