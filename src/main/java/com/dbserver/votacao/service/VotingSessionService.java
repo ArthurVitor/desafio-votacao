@@ -3,6 +3,7 @@ package com.dbserver.votacao.service;
 import com.dbserver.votacao.dto.Page.PageDto;
 import com.dbserver.votacao.dto.VotingSession.CreateVotingSessionDto;
 import com.dbserver.votacao.dto.VotingSession.ListVotingSessionDto;
+import com.dbserver.votacao.exception.BadRequestException;
 import com.dbserver.votacao.exception.PautaNotFoundException;
 import com.dbserver.votacao.mapper.VotingSessionMapper;
 import com.dbserver.votacao.model.Pauta;
@@ -13,6 +14,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service()
 public class VotingSessionService {
@@ -32,6 +35,10 @@ public class VotingSessionService {
 
         VotingSession votingSession = this.votingSessionMapper.toEntity(dto);
         votingSession.setPauta(pauta);
+
+        if (dto.endDate().isBefore(LocalDateTime.now())) {
+            throw new BadRequestException("End date can't be before current date");
+        }
         votingSession.setEndDate(dto.endDate());
 
         VotingSession createdVotingSession = votingSessionRepository.save(votingSession);
@@ -43,5 +50,15 @@ public class VotingSessionService {
         Page<ListVotingSessionDto> page = this.votingSessionRepository.findAll(pageable).map(this.votingSessionMapper::toDto);
 
         return this.votingSessionMapper.toPageDto(page);
+    }
+
+    public ListVotingSessionDto getById(Long id) {
+        VotingSession votingSession = this.votingSessionRepository.findById(id).orElseThrow(() -> new PautaNotFoundException("Could not find voting session with id: " + id));
+
+        return this.votingSessionMapper.toDto(votingSession);
+    }
+
+    public void delete(Long id) {
+        this.votingSessionRepository.deleteById(id);
     }
 }

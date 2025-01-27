@@ -18,12 +18,23 @@ public class VotingSessionController {
     }
 
     @PostMapping("/{pautaId}")
-    public ResponseEntity<ListVotingSessionDto> create(@RequestBody() CreateVotingSessionDto dto, @PathVariable() Long pautaId) {
+    public ResponseEntity<ListVotingSessionDto> create(@RequestBody() CreateVotingSessionDto dto, @PathVariable("pautaId") Long pautaId) {
         return ResponseEntity.ok(this.votingSessionService.create(dto, pautaId));
     }
 
     @GetMapping()
     public ResponseEntity<PageDto<ListVotingSessionDto>> getAll(Pageable pageable) {
         return ResponseEntity.ok(this.votingSessionService.getAll(pageable));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ListVotingSessionDto> getById(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(this.votingSessionService.getById(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
+        this.votingSessionService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
