@@ -1,6 +1,7 @@
 package com.dbserver.votacao.exception;
 
 import com.dbserver.votacao.dto.Error.ErrorResponseDto;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorResponseDto> handleBadRequest(BadRequestException ex) {
         return this.buildErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponseDto> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+        return this.buildErrorResponse(ex.getMessage(), HttpStatus.CONFLICT);
     }
 
     private ResponseEntity<ErrorResponseDto> buildErrorResponse(String message, HttpStatus status) {

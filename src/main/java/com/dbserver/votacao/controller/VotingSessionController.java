@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController()
-@RequestMapping("/voting-session")
+@RequestMapping("/voting-sessions")
 public class VotingSessionController {
     private final VotingSessionService votingSessionService;
 
