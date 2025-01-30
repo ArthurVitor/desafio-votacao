@@ -19,7 +19,7 @@ public class VotingSession {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne()
+    @ManyToOne()
     @JoinColumn(name = "pauta_id", nullable = false)
     private Pauta pauta;
 
