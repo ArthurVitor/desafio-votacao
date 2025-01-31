@@ -1,5 +1,6 @@
 package com.dbserver.votacao.model;
 
+import com.dbserver.votacao.enums.VotingSessionResultEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +20,7 @@ public class VotingSession {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne()
+    @ManyToOne()
     @JoinColumn(name = "pauta_id", nullable = false)
     private Pauta pauta;
 
@@ -31,4 +32,8 @@ public class VotingSession {
 
     @Column(nullable = false)
     private LocalDateTime endDate = this.creationDate.plusMinutes(1);
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private VotingSessionResultEnum result = VotingSessionResultEnum.INDEFINIDO;
 }

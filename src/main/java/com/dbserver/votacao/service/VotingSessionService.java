@@ -3,8 +3,9 @@ package com.dbserver.votacao.service;
 import com.dbserver.votacao.dto.Page.PageDto;
 import com.dbserver.votacao.dto.VotingSession.CreateVotingSessionDto;
 import com.dbserver.votacao.dto.VotingSession.ListVotingSessionDto;
-import com.dbserver.votacao.exception.BadRequestException;
-import com.dbserver.votacao.exception.PautaNotFoundException;
+import com.dbserver.votacao.exception.BadRequest.BadRequestException;
+import com.dbserver.votacao.exception.NotFound.PautaNotFoundException;
+import com.dbserver.votacao.exception.NotFound.VotingSessionNotFoundException;
 import com.dbserver.votacao.mapper.VotingSessionMapper;
 import com.dbserver.votacao.model.Pauta;
 import com.dbserver.votacao.model.VotingSession;
@@ -29,21 +30,21 @@ public class VotingSessionService {
         this.votingSessionMapper = votingSessionMapper;
     }
 
-    @Transactional()
+    @Transactional
     public ListVotingSessionDto create(CreateVotingSessionDto dto, Long pautaId) {
-        Pauta pauta = pautaRepository.findById(pautaId).orElseThrow(() -> new PautaNotFoundException("Could not find pauta with id: " + pautaId));
+        Pauta pauta = pautaRepository.findById(pautaId).orElseThrow(() -> new PautaNotFoundException("Pauta not found with id: " + pautaId));
 
-        VotingSession votingSession = this.votingSessionMapper.toEntity(dto);
+        VotingSession votingSession = votingSessionMapper.toEntity(dto);
         votingSession.setPauta(pauta);
 
-        if (dto.endDate().isBefore(LocalDateTime.now())) {
-            throw new BadRequestException("End date can't be before current date");
+        LocalDateTime endDate = dto.endDate();
+        if (endDate.isBefore(LocalDateTime.now())) {
+            throw new BadRequestException("End date cannot be before the current date");
         }
-        votingSession.setEndDate(dto.endDate());
+        votingSession.setEndDate(endDate);
 
         VotingSession createdVotingSession = votingSessionRepository.save(votingSession);
-
-        return this.votingSessionMapper.toDto(createdVotingSession);
+        return votingSessionMapper.toDto(createdVotingSession);
     }
 
     public PageDto<ListVotingSessionDto> getAll(Pageable pageable) {
@@ -53,7 +54,7 @@ public class VotingSessionService {
     }
 
     public ListVotingSessionDto getById(Long id) {
-        VotingSession votingSession = this.votingSessionRepository.findById(id).orElseThrow(() -> new PautaNotFoundException("Could not find voting session with id: " + id));
+        VotingSession votingSession = this.votingSessionRepository.findById(id).orElseThrow(() -> new VotingSessionNotFoundException("Could not find voting session with id: " + id));
 
         return this.votingSessionMapper.toDto(votingSession);
     }

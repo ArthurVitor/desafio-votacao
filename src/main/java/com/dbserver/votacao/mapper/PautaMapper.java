@@ -10,6 +10,10 @@ import org.springframework.data.domain.Page;
 
 @Mapper(componentModel = "spring")
 public interface PautaMapper {
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "title", target = "title")
+    @Mapping(source = "description", target = "description")
+    @Mapping(source = "creationDate", target = "creationDate")
     ListPautaDto toDto(Pauta pauta);
 
     @Mapping(target = "id", ignore = true)

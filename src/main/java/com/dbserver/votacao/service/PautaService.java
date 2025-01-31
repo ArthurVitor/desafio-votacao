@@ -3,7 +3,7 @@ package com.dbserver.votacao.service;
 import com.dbserver.votacao.dto.Page.PageDto;
 import com.dbserver.votacao.dto.Pauta.CreatePautaDto;
 import com.dbserver.votacao.dto.Pauta.ListPautaDto;
-import com.dbserver.votacao.exception.PautaNotFoundException;
+import com.dbserver.votacao.exception.NotFound.PautaNotFoundException;
 import com.dbserver.votacao.mapper.PautaMapper;
 import com.dbserver.votacao.model.Pauta;
 import com.dbserver.votacao.repository.PautaRepository;
