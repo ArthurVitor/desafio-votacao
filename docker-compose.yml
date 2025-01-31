@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: votacao-api
+    environment:
+      - DATABASE_URL=jdbc:postgresql://db:5432/desafio-votacaodb
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=root
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - votacao-network
+    volumes:
+      - .:/app
+
+  db:
+    image: postgres:13
+    container_name: votacao-db
+    environment:
+      - POSTGRES_DB=desafio-votacaodb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+    ports:
+      - "5433:5432"
+    networks:
+      - votacao-network
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+networks:
+  votacao-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+    driver: local
