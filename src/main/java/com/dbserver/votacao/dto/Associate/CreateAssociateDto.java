@@ -6,8 +6,6 @@ public record CreateAssociateDto(
         @NotNull()
         String name,
         @NotNull()
-        String cpf,
-        @NotNull()
-        String email
+        String cpf
 ) {
 }
