@@ -10,7 +10,6 @@ public record ListVotingSessionWithVoteDto(
         Long id,
         ListPautaDto pauta,
         LocalDateTime creationDate,
-        Boolean active,
         LocalDateTime endDate,
         VotingSessionResultEnum result,
         VoteOptionEnum voteOption
