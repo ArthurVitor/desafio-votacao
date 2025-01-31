@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity()
 @Table(name = "tb_voting_session")
@@ -28,12 +29,12 @@ public class VotingSession {
     private LocalDateTime creationDate = LocalDateTime.now();
 
     @Column(nullable = false)
-    private Boolean active = true;
-
-    @Column(nullable = false)
     private LocalDateTime endDate = this.creationDate.plusMinutes(1);
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private VotingSessionResultEnum result = VotingSessionResultEnum.INDEFINIDO;
+
+    @OneToMany(mappedBy = "votingSession", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Vote> votes;
 }

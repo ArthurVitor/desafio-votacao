@@ -30,17 +30,13 @@ public class VoteService {
     private final VotingSessionRepository votingSessionRepository;
     private final VoteMapper voteMapper;
     private final AssociateMapper associateMapper;
+    private final VotingSessionService votingSessionService;
 
     public ListVoteDto vote(CreateVoteDto vote, Long associateId, Long votingSessionId) {
         VotingSession votingSession = this.getVotingSession(votingSessionId);
         Associate associate = this.getAssociate(associateId);
 
-        if(this.isVotingSessionFinished(votingSession)) {
-            votingSession.setActive(false);
-            this.votingSessionRepository.save(votingSession);
-
-            throw new SessionAlreadyFinishedException("Voting session already finished. Check results");
-        }
+        this.manageSession(votingSession);
 
         if(this.hasAssociateAlreadyVoted(associate, votingSession)) {
             throw new AssociateAlreadyVotedException("Associate already voted on this voting session");
@@ -53,16 +49,15 @@ public class VoteService {
         return voteMapper.toListVoteDto(voteRepository.save(voteEntity));
     }
 
-    @Transactional
     public void remove(Long associateId, Long votingSessionId) {
         Associate associate = this.getAssociate(associateId);
         VotingSession votingSession = this.getVotingSession(votingSessionId);
 
-        if (this.isVotingSessionFinished(votingSession)) {
-            throw new SessionAlreadyFinishedException("Voting session already finished. Check results");
-        }
+        this.manageSession(votingSession);
 
-        this.voteRepository.deleteByVotingSessionAndAssociate(votingSession, associate);
+        Vote vote = this.voteRepository.findByVotingSessionAndAssociate(votingSession, associate);
+        this.voteRepository.delete(vote);
+
     }
 
     public ListAssociateVotesDto getAssociateVotes(Long associateId) {
@@ -70,6 +65,13 @@ public class VoteService {
          List<Vote> votes = this.voteRepository.findByAssociate(associate);
 
          return this.associateMapper.toAssociateVotes(associate, votes);
+    }
+
+    private void manageSession(VotingSession votingSession) {
+        if (this.isVotingSessionFinished(votingSession)) {
+            this.votingSessionService.finishSession(votingSession);
+            throw new SessionAlreadyFinishedException("Voting session already finished. Check results");
+        }
     }
 
     private VotingSession getVotingSession(Long id) {

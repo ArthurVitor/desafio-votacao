@@ -12,5 +12,9 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
 
     List<Vote> findByAssociate(Associate associate);
 
+    List<Vote> findByVotingSession(VotingSession votingSession);
+
+    Vote findByVotingSessionAndAssociate(VotingSession votingSession, Associate associate);
+
     void deleteByVotingSessionAndAssociate(VotingSession votingSession, Associate associate);
 }
