@@ -16,6 +16,7 @@ public interface VotingSessionMapper {
     @Mapping(target = "pauta", ignore = true)
     @Mapping(target = "creationDate", ignore = true)
     @Mapping(target = "active", ignore = true)
+    @Mapping(target = "result", ignore = true)
     VotingSession toEntity(CreateVotingSessionDto dto);
 
     ListVotingSessionDto toDto(VotingSession votingSession);
@@ -29,6 +30,7 @@ public interface VotingSessionMapper {
     @Mapping(target = "creationDate", source = "votingSession.creationDate")
     @Mapping(target = "active", source = "votingSession.active")
     @Mapping(target = "endDate", source = "votingSession.endDate")
+    @Mapping(target = "result", source = "votingSession.result")
     @Mapping(target = "voteOption", source = "voteOption")
     ListVotingSessionWithVoteDto toListVotingSessionWithVoteDto(Vote vote);
 }
