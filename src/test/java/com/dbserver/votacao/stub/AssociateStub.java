@@ -7,7 +7,7 @@ import com.dbserver.votacao.model.Associate;
 public class AssociateStub {
 
     public static CreateAssociateDto generateValidCreateAssociateDto() {
-        return new CreateAssociateDto("Arthur", "123.456.789-00", "arthur@email.com");
+        return new CreateAssociateDto("Arthur", "123.456.789-00");
     }
 
     public static Associate generateValidAssociate() {
@@ -19,6 +19,6 @@ public class AssociateStub {
     }
 
     public static ListAssociateDto generateValidListAssociateDto() {
-        return new ListAssociateDto(1L, "Arthur", "123.456.789-00", "arthur@email.com");
+        return new ListAssociateDto(1L, "Arthur", "123.456.789-00");
     }
 }

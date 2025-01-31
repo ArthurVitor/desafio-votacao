@@ -3,10 +3,12 @@ package com.dbserver.votacao.service;
 import com.dbserver.votacao.dto.Associate.CreateAssociateDto;
 import com.dbserver.votacao.dto.Associate.ListAssociateDto;
 import com.dbserver.votacao.dto.Page.PageDto;
+import com.dbserver.votacao.exception.Conflict.AssociateAlreadyRegisteredException;
 import com.dbserver.votacao.exception.NotFound.AssociateNotFoundException;
 import com.dbserver.votacao.mapper.AssociateMapper;
 import com.dbserver.votacao.model.Associate;
 import com.dbserver.votacao.repository.AssociateRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,9 +27,13 @@ public class AssociateService {
 
     @Transactional()
     public ListAssociateDto create(CreateAssociateDto dto) {
-        Associate associate = associateMapper.toAssociate(dto);
+        try {
+            Associate associate = associateMapper.toAssociate(dto);
 
-        return associateMapper.toDto(associateRepository.save(associate));
+            return associateMapper.toDto(associateRepository.save(associate));
+        } catch (DataIntegrityViolationException ex) {
+            throw new AssociateAlreadyRegisteredException("Associate with this CPF already exists");
+        }
     }
 
     public PageDto<ListAssociateDto> getAll(Pageable pageable) {
