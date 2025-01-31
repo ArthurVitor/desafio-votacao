@@ -3,9 +3,9 @@ package com.dbserver.votacao.service;
 import com.dbserver.votacao.dto.Page.PageDto;
 import com.dbserver.votacao.dto.VotingSession.CreateVotingSessionDto;
 import com.dbserver.votacao.dto.VotingSession.ListVotingSessionDto;
-import com.dbserver.votacao.exception.BadRequestException;
-import com.dbserver.votacao.exception.PautaNotFoundException;
-import com.dbserver.votacao.exception.VotingSessionNotFoundException;
+import com.dbserver.votacao.exception.BadRequest.BadRequestException;
+import com.dbserver.votacao.exception.NotFound.PautaNotFoundException;
+import com.dbserver.votacao.exception.NotFound.VotingSessionNotFoundException;
 import com.dbserver.votacao.mapper.VotingSessionMapper;
 import com.dbserver.votacao.model.Pauta;
 import com.dbserver.votacao.model.VotingSession;
@@ -32,8 +32,7 @@ public class VotingSessionService {
 
     @Transactional
     public ListVotingSessionDto create(CreateVotingSessionDto dto, Long pautaId) {
-        Pauta pauta = pautaRepository.findById(pautaId)
-                .orElseThrow(() -> new PautaNotFoundException("Pauta not found with id: " + pautaId));
+        Pauta pauta = pautaRepository.findById(pautaId).orElseThrow(() -> new PautaNotFoundException("Pauta not found with id: " + pautaId));
 
         VotingSession votingSession = votingSessionMapper.toEntity(dto);
         votingSession.setPauta(pauta);

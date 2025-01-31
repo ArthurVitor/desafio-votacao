@@ -1,6 +1,9 @@
 package com.dbserver.votacao.exception;
 
 import com.dbserver.votacao.dto.Error.ErrorResponseDto;
+import com.dbserver.votacao.exception.BadRequest.BadRequestException;
+import com.dbserver.votacao.exception.Conflict.ConflictException;
+import com.dbserver.votacao.exception.NotFound.NotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
@@ -16,13 +19,18 @@ public class GlobalExceptionHandler {
         return this.buildErrorResponse(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(PropertyReferenceException.class)
-    public ResponseEntity<ErrorResponseDto> handlePropertyReference(PropertyReferenceException ex) {
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ErrorResponseDto> handleBadRequest(BadRequestException ex) {
         return this.buildErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<ErrorResponseDto> handleBadRequest(BadRequestException ex) {
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<ErrorResponseDto> handleConflict(ConflictException ex) {
+        return this.buildErrorResponse(ex.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(PropertyReferenceException.class)
+    public ResponseEntity<ErrorResponseDto> handlePropertyReference(PropertyReferenceException ex) {
         return this.buildErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 

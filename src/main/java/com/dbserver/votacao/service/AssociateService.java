@@ -3,7 +3,7 @@ package com.dbserver.votacao.service;
 import com.dbserver.votacao.dto.Associate.CreateAssociateDto;
 import com.dbserver.votacao.dto.Associate.ListAssociateDto;
 import com.dbserver.votacao.dto.Page.PageDto;
-import com.dbserver.votacao.exception.AssociateNotFoundException;
+import com.dbserver.votacao.exception.NotFound.AssociateNotFoundException;
 import com.dbserver.votacao.mapper.AssociateMapper;
 import com.dbserver.votacao.model.Associate;
 import com.dbserver.votacao.repository.AssociateRepository;
